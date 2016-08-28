@@ -1,0 +1,204 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="salte-search-box-behavior.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-input/iron-input.html">
+
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+
+
+<!--
+  At the present time `salte-search-box` requires that you implement a element called `salte-search-item` so that you can use a custom template.
+
+  ```html
+  <salte-search-box results="[[results]]"></salte-search-box>
+  ```
+  @demo demo/index.html
+ -->
+<dom-module id="salte-search-box">
+  <style>
+    :host {
+      display: block;
+      position: relative;
+      height: var(--salte-search-box-height, 48px);
+      z-index: 9999;
+    }
+
+    /* Search Container Styling */
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.16);
+      color: white;
+      transition: all 0.2s ease;
+      border-radius: 2px;
+      -webkit-user-select: none;
+    }
+
+    :host([active]) .container {
+      background-color: white;
+      color: #616161;
+      @apply(--shadow-elevation-3dp);
+    }
+
+    /* Search Input Styling */
+
+    #search {
+      font-size: 16px;
+      color: white;
+      padding: 0 72px;
+      box-sizing: border-box;
+      height: 48px;
+      width: 100%;
+      font-weight: 400;
+      outline: none;
+      background: transparent;
+      border: 1px solid transparent;
+      font-family: 'Roboto',arial,'Noto Sans Japanese',sans-serif;
+      border: 1px solid transparent;
+      transition: border 0.1s ease-out;
+    }
+
+    #search, #search::-webkit-input-placeholder {
+      color: white;
+    }
+
+    :host([active]) #search {
+      color: #212121;
+    }
+
+    :host([opened]) #search {
+      border-bottom: 1px solid #e5e5e5;
+      transition: border 0.2s ease-in;
+    }
+
+    :host([active]) #search::-webkit-input-placeholder {
+      color: #616161;
+    }
+
+    /* Clear Button Styling */
+
+    #clear {
+      display: none;
+      position: absolute;
+      top: calc(50% - 20px);
+      right: 16px;
+    }
+
+    :host([active]) #clear {
+      display: block;
+    }
+
+    /* Search Icon Styling */
+
+    .loading, .search-icon {
+      position: absolute;
+      pointer-events: none;
+      top: calc(50% - 12px);
+      left: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .search-icon {
+      transition: opacity 1s ease;
+      opacity: 1;
+    }
+
+    :host([loading]) .search-icon {
+      opacity: 0;
+    }
+
+    /* List Styling */
+
+    #list {
+      height: 0;
+      padding: 0;
+      background: white;
+      transition: height 0.2s ease;
+      border-radius: 0 0 2px 2px;
+      overflow: hidden;
+      cursor: pointer;
+      --paper-menu-selected-item: {
+        background-color: #f5f5f5;
+      };
+      --paper-menu-focused-item-after: {
+        background-color: #f5f5f5;
+      };
+    }
+
+    /* Item Styling */
+
+    salte-search-item {
+      @apply(--layout-horizontal);
+      @apply(--layout-flex);
+      @apply(--layout-center);
+    }
+
+    /* Remove Microsofts Clear Button */
+    #search::-ms-clear {
+      display: none;
+    }
+  </style>
+
+  <template>
+    <div class="container">
+      <iron-icon class="search-icon" icon="search" hidden$="[[loading]]"></iron-icon>
+      <paper-spinner class="loading" active="[[loading]]"></paper-spinner>
+      <input id="search" is="iron-input" bind-value="{{value}}" placeholder="Search" autocomplete="off" />
+      <template is="dom-if" if="[[value.length]]">
+        <paper-icon-button id="clear" icon="close" on-tap="clear"></paper-icon-button>
+      </template>
+      <paper-menu id="list">
+        <template id="repeater" is="dom-repeat" items="[[results]]">
+          <paper-item on-mousedown="__select">
+            <salte-search-item item="[[item]]"></salte-search-item>
+          </paper-item>
+        </template>
+      </paper-menu>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      /**
+       * Fired when an item is selected from the search list.
+       *
+       * @event search-select
+       * @param {Object} model.item the item of the selected paper-item
+       */
+
+      is: 'salte-search-box',
+
+      behaviors: [
+        Salte.SearchBoxBehavior
+      ],
+
+      observers: [
+        '__computeItemHeight(opened, results.length)'
+      ],
+
+      __computeItemHeight: function(opened, size) {
+        var height = 0;
+        if (opened && size) {
+          height = size * 48;
+        }
+        this.$.list.style.height = height + 'px';
+      },
+
+      __select: function(event) {
+        this.fire('search-select', event.model.item);
+      },
+
+      /**
+       * Clears the Search Input and focuses the Input
+       */
+      clear: function() {
+        this.set('value', '');
+        this.$.search.focus();
+      }
+    });
+  </script>
+</dom-module>

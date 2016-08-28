@@ -1,0 +1,90 @@
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+<script>
+  window.Salte = window.Salte || {};
+
+  /** @polymerBehavior Salte.SearchBoxBehavior */
+  Salte.SearchBoxBehaviorImpl = {
+    properties: {
+      /**
+       * True if the search is focused or the search contains a value, false otherwise.
+       */
+      active: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
+      },
+
+      /**
+       * True if the search is open, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        reflectToAttribute: true,
+        computed: '_computeOpened(focused, results.length)'
+      },
+
+      /**
+       * True if the search-box is focused, false otherwise.
+       */
+      focused: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
+      },
+
+      /**
+       * The value in the search field
+       */
+      value: {
+        type: String,
+        notify: true
+      },
+
+      /**
+       * Displays a spinner in place of the search icon when true
+       */
+      loading: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
+
+      /**
+       * The list of items to display in the search results menu
+       */
+      results: Array
+    },
+
+    listeners: {
+      'tap': 'open',
+      'focus': 'open',
+      'focusout': 'close'
+    },
+
+    _computeOpened: function(focused, size) {
+      return focused && !!size;
+    },
+
+    /**
+     * Opens the Search Box
+     */
+    open: function() {
+      this.set('focused', true);
+      this.set('active', true);
+    },
+
+    /**
+     * Closes the Search Box
+     */
+    close: function() {
+      this.set('value', this.value && this.value.trim());
+      this.set('focused', false);
+      this.set('active', !!this.value);
+    }
+  };
+
+  Salte.SearchBoxBehavior = [
+    Polymer.IronA11yKeysBehavior,
+    Salte.SearchBoxBehaviorImpl
+  ];
+</script>

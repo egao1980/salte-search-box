@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <title>salte-search-box demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../iron-ajax/iron-ajax.html">
+
+    <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+
+    <link rel="import" href="../salte-search-box.html">
+    <link rel="import" href="salte-search-item.html">
+
+    <style is="custom-style" include="demo-pages-shared-styles"></style>
+    <style is="custom-style">
+      :root {
+        --demo-snippet-demo: {
+          background-color: #7B1FA2;
+        };
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="vertical-section-container centered">
+      <h3>Basic salte-search-box Demo</h3>
+      <demo-snippet>
+        <template is="dom-bind">
+          <iron-ajax
+            auto
+            url="https://jsonplaceholder.typicode.com/users"
+            params="[[params]]"
+            last-response="{{data}}"
+            loading="{{loading}}"
+            debounce-duration="300">
+          </iron-ajax>
+          <salte-search-box loading="[[loading]]" value="{{params.name}}" results="[[data]]"></salte-search-box>
+        </template>
+        <script>
+          var demo = document.querySelector('template[is="dom-bind"]');
+          demo.params = {};
+        </script>
+      </demo-snippet>
+    </div>
+
+  </body>
+</html>
