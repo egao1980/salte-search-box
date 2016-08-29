@@ -6,7 +6,6 @@
 <link rel="import" href="../iron-input/iron-input.html">
 
 <link rel="import" href="../paper-menu/paper-menu.html">
-<link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-spinner/paper-spinner.html">
 
 
@@ -151,12 +150,8 @@
       <template is="dom-if" if="[[value.length]]">
         <paper-icon-button id="clear" icon="close" on-tap="clear"></paper-icon-button>
       </template>
-      <paper-menu id="list">
-        <template id="repeater" is="dom-repeat" items="[[results]]">
-          <paper-item on-mousedown="__select">
-            <salte-search-item item="[[item]]"></salte-search-item>
-          </paper-item>
-        </template>
+      <paper-menu id="list" on-iron-select="__select">
+        <content></content>
       </paper-menu>
     </div>
   </template>
@@ -190,7 +185,14 @@
 
       __select: function(event) {
         this.close();
-        var item = event.model.item;
+        var template = Polymer.dom(this).queryDistributedElements('template[is="dom-repeat"]')[0];
+
+        if (!template) {
+          console.warn('A `dom-repeat` is required to use `salte-search-box`!');
+          return;
+        }
+
+        var item = template.itemForElement(event.detail.item);
         if (this.valueKey) {
           this.set('value', item[this.valueKey]);
         }

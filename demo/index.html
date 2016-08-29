@@ -11,9 +11,10 @@
     <link rel="import" href="../../iron-ajax/iron-ajax.html">
 
     <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
+    <link rel="import" href="../../paper-chip/paper-chip.html">
+    <link rel="import" href="../../paper-item/paper-item.html">
 
     <link rel="import" href="../salte-search-box.html">
-    <link rel="import" href="salte-search-item.html">
 
     <style is="custom-style" include="demo-pages-shared-styles"></style>
     <style is="custom-style">
@@ -30,6 +31,14 @@
       <h3>Basic salte-search-box Demo</h3>
       <demo-snippet>
         <template is="dom-bind">
+          <style is="custom-style">
+            paper-item {
+              height: 48px;
+            }
+            paper-item > div {
+              @apply(--layout-flex);
+            }
+          </style>
           <iron-ajax
             auto
             url="https://jsonplaceholder.typicode.com/users"
@@ -38,7 +47,14 @@
             loading="{{loading}}"
             debounce-duration="300">
           </iron-ajax>
-          <salte-search-box loading="[[loading]]" value="{{params.name}}" results="[[data]]" value-key="name"></salte-search-box>
+          <salte-search-box loading="[[loading]]" value="{{params.name}}" results="[[data]]" value-key="name">
+            <template is="dom-repeat" items="[[data]]">
+              <paper-item>
+                <div>[[item.name]]</div>
+                <paper-chip>[[item.company.name]]</paper-chip>
+              </paper-item>
+            </template>
+          </salte-search-box>
         </template>
         <script>
           var demo = document.querySelector('template[is="dom-bind"]');
