@@ -5,6 +5,9 @@ sudo: required
 cache:
   directories:
   - bower_components
+branches:
+  only:
+    - master
 addons:
   firefox: 46
   sauce_connect: true
