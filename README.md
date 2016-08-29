@@ -1,4 +1,4 @@
-_[Demo and API docs](https://salte-io.github.io/salte-rating/)_
+_[Demo and API docs](https://salte-io.github.io/salte-search-box/)_
 
 # \<salte-search-box\>
 
