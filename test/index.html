@@ -23,6 +23,13 @@
         var element;
         setup(function() {
           element = fixture('basic');
+          element.set('results', [{
+            key: 'polymer',
+            value: 'Polymer University'
+          }, {
+            key: 'salte',
+            value: 'Salte University'
+          }])
         });
 
         test('instantiating the element works', function() {
@@ -30,7 +37,6 @@
         });
 
         test('should display the list when focused with elements', function(done) {
-          element.set('results', ['test', 'test2']);
           element.set('focused', true);
           assert.equal(element.$.repeater.items.length, element.results.length);
           assert.equal(element.$.list.style.height, '96px');
@@ -41,9 +47,14 @@
         });
 
         test('should fire off search-select when an item is selected', function(done) {
-          element.set('results', ['test', 'test2']);
+          element.set('valueKey', 'key');
+          assert.equal(element.value, '');
+          element.open();
+          assert.equal(element.opened, true);
           flush(function() {
             element.addEventListener('search-select', function() {
+              assert.equal(element.value, 'polymer');
+              assert.equal(element.opened, false);
               done();
             });
             Polymer.dom(element.root).querySelector('paper-item').fire('mousedown');
@@ -58,7 +69,6 @@
             done();
           });
         });
-
       });
     </script>
   </body>

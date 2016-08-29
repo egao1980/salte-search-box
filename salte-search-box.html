@@ -189,7 +189,12 @@
       },
 
       __select: function(event) {
-        this.fire('search-select', event.model.item);
+        this.close();
+        var item = event.model.item;
+        if (this.valueKey) {
+          this.set('value', item[this.valueKey]);
+        }
+        this.fire('search-select', item);
       },
 
       /**

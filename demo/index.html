@@ -38,7 +38,7 @@
             loading="{{loading}}"
             debounce-duration="300">
           </iron-ajax>
-          <salte-search-box loading="[[loading]]" value="{{params.name}}" results="[[data]]"></salte-search-box>
+          <salte-search-box loading="[[loading]]" value="{{params.name}}" results="[[data]]" value-key="name"></salte-search-box>
         </template>
         <script>
           var demo = document.querySelector('template[is="dom-bind"]');
