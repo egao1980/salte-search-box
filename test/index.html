@@ -8,28 +8,47 @@
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
+    <link rel="import" href="../../paper-item/paper-item.html">
     <link rel="import" href="../salte-search-box.html">
   </head>
   <body>
-
-    <test-fixture id="basic">
-      <template>
-        <salte-search-box></salte-search-box>
-      </template>
-    </test-fixture>
+    <!--
+      *** Important! ***
+      You'll notice that these tests don't use test-fixture. That's because
+      there's a problem stamping nested templates in IE/Safari 8. This
+      should eventually be patched in webcomponents.js, but in the meantime
+      we're going to run these tests "the old way".
+      This is relevant because this means that you, as the test writer,
+      need to remember that an element's state is maintained between tests.
+      If you don't want this, either use a new element, or clean up after
+      your test.
+    -->
+    <template is="dom-bind" id="template">
+      <salte-search-box results="{{results}}" id="basic">
+        <template is="dom-repeat" items="[[results]]">
+          <paper-item>[[item.value]]</paper-item>
+        </template>
+      </salte-search-box>
+    </template>
 
     <script>
       suite('salte-search-box', function() {
         var element;
         setup(function() {
-          element = fixture('basic');
-          element.set('results', [{
+          var template = document.getElementById('template');
+          template.set('results', [{
             key: 'polymer',
             value: 'Polymer University'
           }, {
             key: 'salte',
             value: 'Salte University'
-          }])
+          }]);
+          element = document.getElementById('basic');
+        });
+
+        suiteTeardown(function() {
+          element.set('focused', false);
+          element.set('valueKey', undefined);
         });
 
         test('instantiating the element works', function() {
@@ -38,10 +57,9 @@
 
         test('should display the list when focused with elements', function(done) {
           element.set('focused', true);
-          assert.equal(element.$.repeater.items.length, element.results.length);
           assert.equal(element.$.list.style.height, '96px');
           flush(function() {
-            assert.equal(Polymer.dom(element.root).querySelectorAll('paper-item').length, element.results.length);
+            assert.equal(element.$.list.items.length, element.results.length);
             done();
           });
         });
@@ -57,7 +75,7 @@
               assert.equal(element.opened, false);
               done();
             });
-            Polymer.dom(element.root).querySelector('paper-item').fire('mousedown');
+            element.$.list.items[0].fire('mousedown');
           });
         });
 
