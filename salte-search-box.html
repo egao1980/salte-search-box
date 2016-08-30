@@ -7,6 +7,7 @@
 
 <link rel="import" href="../paper-menu/paper-menu.html">
 <link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 
 
 <!--
@@ -190,7 +191,7 @@
         }.bind(this));
       },
 
-      selectPrevious: function(event) {
+      __selectPrevious: function(event) {
         event.preventDefault();
         if (isNaN(this.$.list.selected)) {
           this.$.list.set('selected', 0);
@@ -198,8 +199,8 @@
           this.$.list.selectPrevious();
         }
       },
-
-      selectNext: function(event) {
+      
+      __selectNext: function(event) {
         event.preventDefault();
         if (isNaN(this.$.list.selected)) {
           this.$.list.set('selected', 0);
@@ -220,6 +221,10 @@
         this.submit(template.itemForElement(event.currentTarget || this.$.list.selectedItem));
       },
 
+      /**
+       * Submits the given item
+       * @param item {Object} item the item to submit
+       */
       submit: function(item) {
         if (this.valueKey) {
           this.set('value', item[this.valueKey]);
