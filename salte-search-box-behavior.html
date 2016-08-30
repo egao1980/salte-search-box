@@ -66,6 +66,14 @@
       'focusout': 'close'
     },
 
+    keyBindings: {
+      'up': 'selectPrevious',
+      'tab+shift': 'selectPrevious',
+      'down': 'selectNext',
+      'tab': 'selectNext',
+      'enter': '__submit'
+    },
+
     _computeOpened: function(focused, size) {
       return focused && !!size;
     },

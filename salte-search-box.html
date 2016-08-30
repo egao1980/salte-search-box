@@ -150,7 +150,7 @@
       <template is="dom-if" if="[[value.length]]">
         <paper-icon-button id="clear" icon="close" on-tap="clear"></paper-icon-button>
       </template>
-      <paper-menu id="list" on-iron-select="__select">
+      <paper-menu id="list" on-items-changed="__bindEvents">
         <content></content>
       </paper-menu>
     </div>
@@ -183,7 +183,32 @@
         this.$.list.style.height = height + 'px';
       },
 
-      __select: function(event) {
+      __bindEvents: function(event) {
+        event.detail.value.forEach(function(item) {
+          item.removeEventListener('mousedown', this.__submit.bind(this));
+          item.addEventListener('mousedown', this.__submit.bind(this));
+        }.bind(this));
+      },
+
+      selectPrevious: function(event) {
+        event.preventDefault();
+        if (isNaN(this.$.list.selected)) {
+          this.$.list.set('selected', 0);
+        } else {
+          this.$.list.selectPrevious();
+        }
+      },
+
+      selectNext: function(event) {
+        event.preventDefault();
+        if (isNaN(this.$.list.selected)) {
+          this.$.list.set('selected', 0);
+        } else {
+          this.$.list.selectNext();
+        }
+      },
+
+      __submit: function(event) {
         this.close();
         var template = Polymer.dom(this).queryDistributedElements('template[is="dom-repeat"]')[0];
 
@@ -192,7 +217,10 @@
           return;
         }
 
-        var item = template.itemForElement(event.detail.item);
+        this.submit(template.itemForElement(event.currentTarget || this.$.list.selectedItem));
+      },
+
+      submit: function(item) {
         if (this.valueKey) {
           this.set('value', item[this.valueKey]);
         }
