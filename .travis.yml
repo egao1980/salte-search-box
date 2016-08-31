@@ -17,9 +17,10 @@ addons:
     packages:
     - google-chrome-stable
 before_script:
-- npm install -g bower web-component-tester
+- npm install -g bower polylint web-component-tester
 - bower prune
 - bower install
+- polylint
 script:
 - xvfb-run wct
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'default'; fi
