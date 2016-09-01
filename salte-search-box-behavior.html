@@ -38,7 +38,8 @@
        */
       value: {
         type: String,
-        notify: true
+        notify: true,
+        observer: '_valueChanged'
       },
 
       /**
@@ -76,6 +77,10 @@
 
     _computeOpened: function(focused, size) {
       return focused && !!size;
+    },
+
+    _valueChanged: function(value) {
+      this.set('active', this.focused || !!this.value);
     },
 
     /**

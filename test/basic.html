@@ -47,7 +47,7 @@
         });
 
         it('should display the list when focused with elements', function(done) {
-          search.set('focused', true);
+          search.$.search.fire('focus');
           assert.equal(search.$.list.style.height, '144px');
           flush(function() {
             assert.equal(search.$.list.items.length, search.results.length);
@@ -93,6 +93,14 @@
           flush(function() {
             search.$$('#clear').click();
             assert.equal(search.value, '');
+            done();
+          });
+        });
+
+        it('should become active when the value is change externally', function(done) {
+          search.set('value', 'test');
+          flush(function() {
+            assert.equal(search.active, true);
             done();
           });
         });
