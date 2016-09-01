@@ -8,21 +8,11 @@
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
+    <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../../paper-item/paper-item.html">
     <link rel="import" href="../salte-search-box.html">
   </head>
   <body>
-    <!--
-      *** Important! ***
-      You'll notice that these tests don't use test-fixture. That's because
-      there's a problem stamping nested templates in IE/Safari 8. This
-      should eventually be patched in webcomponents.js, but in the meantime
-      we're going to run these tests "the old way".
-      This is relevant because this means that you, as the test writer,
-      need to remember that an element's state is maintained between tests.
-      If you don't want this, either use a new element, or clean up after
-      your test.
-    -->
     <test-fixture id="search">
       <template is="dom-template">
         <salte-search-box results="{{results}}" id="basic">
@@ -34,7 +24,7 @@
     </test-fixture>
 
     <script>
-      describe('<salte-search-box>', function() {
+      describe('Basic features', function() {
         var search;
 
         beforeEach(function() {
@@ -45,6 +35,9 @@
             }, {
               key: 'salte',
               value: 'Salte University'
+            }, {
+              key: 'isu',
+              value: 'Iowa State University'
             }]
           });
         });
@@ -55,7 +48,7 @@
 
         it('should display the list when focused with elements', function(done) {
           search.set('focused', true);
-          assert.equal(search.$.list.style.height, '96px');
+          assert.equal(search.$.list.style.height, '144px');
           flush(function() {
             assert.equal(search.$.list.items.length, search.results.length);
             done();
