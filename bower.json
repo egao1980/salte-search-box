@@ -2,6 +2,20 @@
   "name": "salte-search-box",
   "description": "A custom search element with template support!",
   "main": "salte-search-box.html",
+  "authors": [
+    "Nick Woodward <nick@salte.io>"
+  ],
+  "homepage": "https://salte-io.github.io/salte-search-box",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/salte-io/salte-search-box"
+  },
+  "keywords": [
+    "web-components",
+    "polymer",
+    "search",
+    "box"
+  ],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.4.0",
     "paper-menu": "PolymerElements/paper-menu#^1.2.2",
