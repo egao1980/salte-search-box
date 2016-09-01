@@ -8,12 +8,12 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../../iron-ajax/iron-ajax.html">
 
     <link rel="import" href="../../paper-checkbox/paper-checkbox.html">
     <link rel="import" href="../../paper-chip/paper-chip.html">
     <link rel="import" href="../../paper-item/paper-item.html">
 
+    <link rel="import" href="iron-ajax-mock.html">
     <link rel="import" href="../salte-search-box.html">
 
     <style is="custom-style" include="demo-pages-shared-styles"></style>
@@ -41,17 +41,17 @@
           </style>
           <iron-ajax
             auto
-            url="https://jsonplaceholder.typicode.com/users"
+            url="/api/search"
             params="[[params]]"
             last-response="{{data}}"
             loading="{{loading}}"
             debounce-duration="300">
           </iron-ajax>
-          <salte-search-box loading="[[loading]]" value="{{params.name}}" results="[[data]]" value-key="name">
+          <salte-search-box loading="[[loading]]" value="{{params.keyword}}" results="[[data]]" value-key="keyword">
             <template is="dom-repeat" items="[[data]]">
               <paper-item>
-                <div>[[item.name]]</div>
-                <paper-chip>[[item.company.name]]</paper-chip>
+                <div>[[item.keyword]]</div>
+                <paper-chip>[[item.type]]</paper-chip>
               </paper-item>
             </template>
           </salte-search-box>
