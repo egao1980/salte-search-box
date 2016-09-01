@@ -199,7 +199,7 @@
           this.$.list.selectPrevious();
         }
       },
-      
+
       __selectNext: function(event) {
         event.preventDefault();
         if (isNaN(this.$.list.selected)) {
@@ -226,7 +226,9 @@
        * @param item {Object} item the item to submit
        */
       submit: function(item) {
-        if (this.valueKey) {
+        if (this.valueKey === '') {
+          this.set('value', item);
+        } else if (this.valueKey) {
           this.set('value', item[this.valueKey]);
         }
         this.fire('search-select', item);

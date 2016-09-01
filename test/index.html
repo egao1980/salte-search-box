@@ -1,93 +1,22 @@
 <!doctype html>
-
 <html>
-  <head>
-    <title>salte-search-box test</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../../paper-item/paper-item.html">
-    <link rel="import" href="../salte-search-box.html">
-  </head>
-  <body>
-    <!--
-      *** Important! ***
-      You'll notice that these tests don't use test-fixture. That's because
-      there's a problem stamping nested templates in IE/Safari 8. This
-      should eventually be patched in webcomponents.js, but in the meantime
-      we're going to run these tests "the old way".
-      This is relevant because this means that you, as the test writer,
-      need to remember that an element's state is maintained between tests.
-      If you don't want this, either use a new element, or clean up after
-      your test.
-    -->
-    <template is="dom-bind" id="template">
-      <salte-search-box results="{{results}}" id="basic">
-        <template is="dom-repeat" items="[[results]]">
-          <paper-item>[[item.value]]</paper-item>
-        </template>
-      </salte-search-box>
-    </template>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>salte-search-box tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+</head>
 
-    <script>
-      suite('salte-search-box', function() {
-        var element;
-        setup(function() {
-          var template = document.getElementById('template');
-          template.set('results', [{
-            key: 'polymer',
-            value: 'Polymer University'
-          }, {
-            key: 'salte',
-            value: 'Salte University'
-          }]);
-          element = document.getElementById('basic');
-        });
+<body>
+  <script>
+    var shadow = document.location.search.indexOf('dom=shadow') > -1;
+    WCT._config.environmentScripts.push(shadow ? 'webcomponentsjs/webcomponents.js' : 'webcomponentsjs/webcomponents-lite.js');
 
-        suiteTeardown(function() {
-          element.set('focused', false);
-          element.set('valueKey', undefined);
-        });
+    WCT.loadSuites([
+      'basic.html'
+    ]);
+  </script>
+</body>
 
-        test('instantiating the element works', function() {
-          assert.equal(element.is, 'salte-search-box');
-        });
-
-        test('should display the list when focused with elements', function(done) {
-          element.set('focused', true);
-          assert.equal(element.$.list.style.height, '96px');
-          flush(function() {
-            assert.equal(element.$.list.items.length, element.results.length);
-            done();
-          });
-        });
-
-        test('should fire off search-select when an item is selected', function(done) {
-          element.set('valueKey', 'key');
-          assert.equal(element.value, '');
-          element.open();
-          assert.equal(element.opened, true);
-          flush(function() {
-            element.addEventListener('search-select', function() {
-              assert.equal(element.value, 'polymer');
-              assert.equal(element.opened, false);
-              done();
-            });
-            element.$.list.items[0].fire('mousedown');
-          });
-        });
-
-        test('should support clearing the value', function(done) {
-          element.set('value', 'test');
-          flush(function() {
-            Polymer.dom(element.root).querySelector('#clear').click();
-            assert.equal(element.value, '');
-            done();
-          });
-        });
-      });
-    </script>
-  </body>
 </html>

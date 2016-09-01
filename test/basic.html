@@ -1,0 +1,109 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>salte-search-box test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../paper-item/paper-item.html">
+    <link rel="import" href="../salte-search-box.html">
+  </head>
+  <body>
+    <!--
+      *** Important! ***
+      You'll notice that these tests don't use test-fixture. That's because
+      there's a problem stamping nested templates in IE/Safari 8. This
+      should eventually be patched in webcomponents.js, but in the meantime
+      we're going to run these tests "the old way".
+      This is relevant because this means that you, as the test writer,
+      need to remember that an element's state is maintained between tests.
+      If you don't want this, either use a new element, or clean up after
+      your test.
+    -->
+    <test-fixture id="search">
+      <template is="dom-template">
+        <salte-search-box results="{{results}}" id="basic">
+          <template is="dom-repeat" items="[[results]]">
+            <paper-item>[[item.value]]</paper-item>
+          </template>
+        </salte-search-box>
+      </template>
+    </test-fixture>
+
+    <script>
+      describe('<salte-search-box>', function() {
+        var search;
+
+        beforeEach(function() {
+          search = fixture('search', {
+            results: [{
+              key: 'polymer',
+              value: 'Polymer University'
+            }, {
+              key: 'salte',
+              value: 'Salte University'
+            }]
+          });
+        });
+
+        it('instantiating the element works', function() {
+          assert.equal(search.is, 'salte-search-box');
+        });
+
+        it('should display the list when focused with elements', function(done) {
+          search.set('focused', true);
+          assert.equal(search.$.list.style.height, '96px');
+          flush(function() {
+            assert.equal(search.$.list.items.length, search.results.length);
+            done();
+          });
+        });
+
+        it('should fire off search-select when an item is selected', function(done) {
+          search.set('valueKey', 'key');
+          assert.equal(search.value, '');
+          search.open();
+          assert.equal(search.opened, true);
+          flush(function() {
+            search.addEventListener('search-select', function() {
+              assert.equal(search.value, 'polymer');
+              assert.equal(search.opened, false);
+              done();
+            });
+            search.$.list.items[0].fire('mousedown');
+          });
+        });
+
+        it('should support selecting a value from an Array of Strings', function(done) {
+          search = fixture('search', {
+            results: ['Polymer University', 'Salte University']
+          });
+          search.set('valueKey', '');
+          assert.equal(search.value, '');
+          search.open();
+          assert.equal(search.opened, true);
+          flush(function() {
+            search.addEventListener('search-select', function() {
+              assert.equal(search.value, 'Polymer University');
+              assert.equal(search.opened, false);
+              done();
+            });
+            search.$.list.items[0].fire('mousedown');
+          });
+        });
+
+        it('should support clearing the value', function(done) {
+          search.set('value', 'test');
+          flush(function() {
+            search.$$('#clear').click();
+            assert.equal(search.value, '');
+            done();
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
