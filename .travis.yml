@@ -9,7 +9,7 @@ branches:
   only:
     - master
 addons:
-  firefox: 46
+  firefox: 48
   sauce_connect: true
   apt:
     sources:
