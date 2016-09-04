@@ -93,8 +93,8 @@
         it('should submit the current item with the "enter" key', function(done) {
           assert.equal(search.$.list.selectedItem, undefined);
           flush(function() {
-            search.addEventListener('search-select', function(event) {
-              assert.equal(event.detail.value, 'Salte University');
+            search.addEventListener('selected-changed', function(event) {
+              assert.equal(event.detail.value.value, 'Salte University');
               done();
             });
             MockInteractions.pressAndReleaseKeyOn(search, 9);

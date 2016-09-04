@@ -231,7 +231,7 @@
         } else if (this.valueKey) {
           this.set('value', item[this.valueKey]);
         }
-        this.fire('search-select', item);
+        this.set('selected', item);
       },
 
       /**

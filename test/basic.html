@@ -55,14 +55,17 @@
           });
         });
 
-        it('should fire off search-select when an item is selected', function(done) {
+        it('should fire off selected-changed when an item is selected', function(done) {
           search.set('valueKey', 'key');
           assert.equal(search.value, '');
+          assert.equal(search.selected, undefined);
           search.open();
           assert.equal(search.opened, true);
           flush(function() {
-            search.addEventListener('search-select', function() {
+            search.addEventListener('selected-changed', function() {
               assert.equal(search.value, 'polymer');
+              assert.equal(search.selected.value, 'Polymer University');
+              assert.equal(search.selected, search.results[0]);
               assert.equal(search.opened, false);
               done();
             });
@@ -76,11 +79,13 @@
           });
           search.set('valueKey', '');
           assert.equal(search.value, '');
+          assert.equal(search.selected, undefined);
           search.open();
           assert.equal(search.opened, true);
           flush(function() {
-            search.addEventListener('search-select', function() {
+            search.addEventListener('selected-changed', function() {
               assert.equal(search.value, 'Polymer University');
+              assert.equal(search.selected, 'Polymer University');
               assert.equal(search.opened, false);
               done();
             });
@@ -93,6 +98,7 @@
           flush(function() {
             search.$$('#clear').click();
             assert.equal(search.value, '');
+            assert.equal(search.selected, undefined);
             done();
           });
         });
