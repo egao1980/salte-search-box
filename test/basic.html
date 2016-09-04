@@ -115,6 +115,16 @@
           search.set('placeholder', 'do stuff!');
           search.$.search.placeholder = 'do stuff!';
         });
+
+        it('should auto-select when the value matches exactly', function() {
+          assert.equal(search.selected, undefined);
+          search.set('autoSelect', true);
+          search.set('valueKey', 'value');
+          search.set('value', 'Polymer University');
+          assert.equal(search.selected.value, 'Polymer University');
+          search.set('value', 'Polymer Universit');
+          assert.equal(search.selected.value, 'Polymer University');
+        });
       });
     </script>
   </body>

@@ -64,6 +64,11 @@
       },
 
       /**
+       * Auto Selects a result when the value matches the results value-key value
+       */
+      autoSelect: Boolean,
+
+      /**
        * The list of items to display in the search results menu
        */
       results: Array,
@@ -80,6 +85,10 @@
       'focusout': 'close'
     },
 
+    observers: [
+      '__autoSelect(value, results.*)'
+    ],
+
     keyBindings: {
       'up': '__selectPrevious',
       'tab+shift': '__selectPrevious',
@@ -94,6 +103,19 @@
 
     _valueChanged: function(value) {
       this.set('active', this.focused || !!this.value);
+    },
+
+    __autoSelect: function(value) {
+      if (this.autoSelect && this.results && this.results.length) {
+        this.results.forEach(function(result) {
+          if (result[this.valueKey] === value) {
+            if (this.selected !== result) {
+              this.set('selected', result);
+            }
+            return;
+          }
+        }.bind(this));
+      }
     },
 
     /**
