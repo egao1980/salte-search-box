@@ -22,5 +22,4 @@ before_script:
 - bower install
 - polylint
 script:
-- xvfb-run wct
-- if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then wct -s 'default'; fi
+- wct -s 'default'
