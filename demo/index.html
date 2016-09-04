@@ -47,7 +47,7 @@
             loading="{{loading}}"
             debounce-duration="300">
           </iron-ajax>
-          <salte-search-box loading="[[loading]]" value="{{params.keyword}}" results="[[data]]" value-key="keyword">
+          <salte-search-box loading="[[loading]]" placeholder="Search" value="{{params.keyword}}" results="[[data]]" value-key="keyword">
             <template is="dom-repeat" items="[[data]]">
               <paper-item>
                 <div>[[item.keyword]]</div>

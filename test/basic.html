@@ -110,6 +110,11 @@
             done();
           });
         });
+
+        it('should support a custom placeholder', function() {
+          search.set('placeholder', 'do stuff!');
+          search.$.search.placeholder = 'do stuff!';
+        });
       });
     </script>
   </body>

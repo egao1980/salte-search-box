@@ -147,7 +147,7 @@
     <div class="container">
       <iron-icon class="search-icon" icon="search" hidden$="[[loading]]"></iron-icon>
       <paper-spinner class="loading" active="[[loading]]"></paper-spinner>
-      <input id="search" is="iron-input" bind-value="{{value}}" placeholder="Search" autocomplete="off" />
+      <input id="search" is="iron-input" bind-value="{{value}}" placeholder="[[placeholder]]" autocomplete="off" />
       <template is="dom-if" if="[[value.length]]">
         <paper-icon-button id="clear" icon="close" on-tap="clear"></paper-icon-button>
       </template>
