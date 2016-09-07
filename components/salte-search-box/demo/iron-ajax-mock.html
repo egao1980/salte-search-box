@@ -1,0 +1,50 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+  Polymer({
+    is: 'iron-ajax',
+
+    properties: {
+      params: Object,
+      lastResponse: {
+        type: Object,
+        notify: true
+      },
+      loading: {
+        type: Boolean,
+        notify: true
+      },
+      debounceDuration: Number
+    },
+
+    observers: [
+      'send(params.*)'
+    ],
+
+    ready: function() {
+      this.set('mockData', [{
+        keyword: 'Polymer University',
+        type: 'School'
+      }, {
+        keyword: 'Salte University',
+        type: 'School'
+      }]);
+    },
+
+    send: function() {
+      this.debounce('request', function() {
+        this.set('loading', true);
+        setTimeout(function() {
+          if (this.params.keyword) {
+            this.set('lastResponse', this.mockData.filter(function(value) {
+              return value.keyword.toUpperCase().indexOf(this.params.keyword.toUpperCase()) !== -1;
+            }.bind(this)));
+          } else {
+            this.set('lastResponse', this.mockData);
+          }
+          this.set('loading', false);
+        }.bind(this), 500);
+      }.bind(this), this.debounceDuration);
+    }
+  });
+</script>

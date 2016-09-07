@@ -1,0 +1,131 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>salte-search-box test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+    <link rel="import" href="../../paper-item/paper-item.html">
+    <link rel="import" href="../salte-search-box.html">
+  </head>
+  <body>
+    <test-fixture id="search">
+      <template is="dom-template">
+        <salte-search-box results="{{results}}" id="basic">
+          <template is="dom-repeat" items="[[results]]">
+            <paper-item>[[item.value]]</paper-item>
+          </template>
+        </salte-search-box>
+      </template>
+    </test-fixture>
+
+    <script>
+      describe('Basic features', function() {
+        var search;
+
+        beforeEach(function() {
+          search = fixture('search', {
+            results: [{
+              key: 'polymer',
+              value: 'Polymer University'
+            }, {
+              key: 'salte',
+              value: 'Salte University'
+            }, {
+              key: 'isu',
+              value: 'Iowa State University'
+            }]
+          });
+        });
+
+        it('instantiating the element works', function() {
+          assert.equal(search.is, 'salte-search-box');
+        });
+
+        it('should display the list when focused with elements', function(done) {
+          search.$.search.fire('focus');
+          assert.equal(search.$.list.style.height, '144px');
+          flush(function() {
+            assert.equal(search.$.list.items.length, search.results.length);
+            done();
+          });
+        });
+
+        it('should fire off selected-changed when an item is selected', function(done) {
+          search.set('valueKey', 'key');
+          assert.equal(search.value, '');
+          assert.equal(search.selected, undefined);
+          search.open();
+          assert.equal(search.opened, true);
+          flush(function() {
+            search.addEventListener('selected-changed', function() {
+              assert.equal(search.value, 'polymer');
+              assert.equal(search.selected.value, 'Polymer University');
+              assert.equal(search.selected, search.results[0]);
+              assert.equal(search.opened, false);
+              done();
+            });
+            search.$.list.items[0].fire('mousedown');
+          });
+        });
+
+        it('should support selecting a value from an Array of Strings', function(done) {
+          search = fixture('search', {
+            results: ['Polymer University', 'Salte University']
+          });
+          search.set('valueKey', '');
+          assert.equal(search.value, '');
+          assert.equal(search.selected, undefined);
+          search.open();
+          assert.equal(search.opened, true);
+          flush(function() {
+            search.addEventListener('selected-changed', function() {
+              assert.equal(search.value, 'Polymer University');
+              assert.equal(search.selected, 'Polymer University');
+              assert.equal(search.opened, false);
+              done();
+            });
+            search.$.list.items[0].fire('mousedown');
+          });
+        });
+
+        it('should support clearing the value', function(done) {
+          search.set('value', 'test');
+          flush(function() {
+            search.$$('#clear').click();
+            assert.equal(search.value, '');
+            assert.equal(search.selected, undefined);
+            done();
+          });
+        });
+
+        it('should become active when the value is change externally', function(done) {
+          search.set('value', 'test');
+          flush(function() {
+            assert.equal(search.active, true);
+            done();
+          });
+        });
+
+        it('should support a custom placeholder', function() {
+          search.set('placeholder', 'do stuff!');
+          search.$.search.placeholder = 'do stuff!';
+        });
+
+        it('should auto-select when the value matches exactly', function() {
+          assert.equal(search.selected, undefined);
+          search.set('autoSelect', true);
+          search.set('valueKey', 'value');
+          search.set('value', 'Polymer University');
+          assert.equal(search.selected.value, 'Polymer University');
+          search.set('value', 'Polymer Universit');
+          assert.equal(search.selected.value, 'Polymer University');
+        });
+      });
+    </script>
+  </body>
+</html>

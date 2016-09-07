@@ -1,0 +1,143 @@
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
+
+<script>
+  window.Salte = window.Salte || {};
+
+  /** @polymerBehavior Salte.SearchBoxBehavior */
+  Salte.SearchBoxBehaviorImpl = {
+    properties: {
+      /**
+       * True if the search is focused or the search contains a value, false otherwise.
+       */
+      active: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
+      },
+
+      /**
+       * True if the search is open, false otherwise.
+       */
+      opened: {
+        type: Boolean,
+        reflectToAttribute: true,
+        computed: '_computeOpened(focused, results.length)'
+      },
+
+      /**
+       * True if the search-box is focused, false otherwise.
+       */
+      focused: {
+        type: Boolean,
+        reflectToAttribute: true,
+        value: false
+      },
+
+      /**
+       * The placeholder of the input
+       */
+      placeholder: String,
+
+      /**
+       * The value in the search field
+       */
+      value: {
+        type: String,
+        notify: true,
+        observer: '_valueChanged'
+      },
+
+      /**
+       * The selected item
+       */
+      selected: {
+        type: Object,
+        notify: true
+      },
+
+      /**
+       * Displays a spinner in place of the search icon when true
+       */
+      loading: {
+        type: Boolean,
+        reflectToAttribute: true
+      },
+
+      /**
+       * Auto Selects a result when the value matches the results value-key value
+       */
+      autoSelect: Boolean,
+
+      /**
+       * The list of items to display in the search results menu
+       */
+      results: Array,
+
+      /**
+       * The key used to set the value when an item is selected
+       */
+      valueKey: String
+    },
+
+    listeners: {
+      'tap': 'open',
+      'focus': 'open',
+      'focusout': 'close'
+    },
+
+    observers: [
+      '__autoSelect(value, results.*)'
+    ],
+
+    keyBindings: {
+      'up': '__selectPrevious',
+      'tab+shift': '__selectPrevious',
+      'down': '__selectNext',
+      'tab': '__selectNext',
+      'enter': '__submit'
+    },
+
+    _computeOpened: function(focused, size) {
+      return focused && !!size;
+    },
+
+    _valueChanged: function(value) {
+      this.set('active', this.focused || !!this.value);
+    },
+
+    __autoSelect: function(value) {
+      if (this.autoSelect && this.results && this.results.length) {
+        this.results.forEach(function(result) {
+          if (result[this.valueKey] === value) {
+            if (this.selected !== result) {
+              this.set('selected', result);
+            }
+            return;
+          }
+        }.bind(this));
+      }
+    },
+
+    /**
+     * Opens the Search Box
+     */
+    open: function() {
+      this.set('focused', true);
+      this.set('active', true);
+    },
+
+    /**
+     * Closes the Search Box
+     */
+    close: function() {
+      this.set('value', this.value && this.value.trim());
+      this.set('focused', false);
+      this.set('active', !!this.value);
+    }
+  };
+
+  Salte.SearchBoxBehavior = [
+    Polymer.IronA11yKeysBehavior,
+    Salte.SearchBoxBehaviorImpl
+  ];
+</script>

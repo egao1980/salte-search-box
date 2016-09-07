@@ -1,0 +1,108 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>salte-search-box test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+    <link rel="import" href="../../paper-item/paper-item.html">
+    <link rel="import" href="../salte-search-box.html">
+  </head>
+  <body>
+    <test-fixture id="search">
+      <template is="dom-template">
+        <salte-search-box results="{{results}}" id="basic">
+          <template is="dom-repeat" items="[[results]]">
+            <paper-item>[[item.value]]</paper-item>
+          </template>
+        </salte-search-box>
+      </template>
+    </test-fixture>
+
+    <script>
+      describe('keyboard navigation', function() {
+        var search;
+
+        beforeEach(function() {
+          search = fixture('search', {
+            results: [{
+              key: 'polymer',
+              value: 'Polymer University'
+            }, {
+              key: 'salte',
+              value: 'Salte University'
+            }, {
+              key: 'isu',
+              value: 'Iowa State University'
+            }]
+          });
+        });
+
+        it('should support selecting the next item with the "down" key', function(done) {
+          assert.equal(search.$.list.selectedItem, undefined);
+          flush(function() {
+            MockInteractions.pressAndReleaseKeyOn(search, 40);
+            MockInteractions.pressAndReleaseKeyOn(search, 40);
+            flush(function() {
+              assert.equal(search.$.list.selectedItem.textContent.trim(), 'Salte University');
+              done();
+            });
+          });
+        });
+
+        it('should support selecting the next item with the "tab" key', function(done) {
+          assert.equal(search.$.list.selectedItem, undefined);
+          flush(function() {
+            MockInteractions.pressAndReleaseKeyOn(search, 9);
+            MockInteractions.pressAndReleaseKeyOn(search, 9);
+            flush(function() {
+              assert.equal(search.$.list.selectedItem.textContent.trim(), 'Salte University');
+              done();
+            });
+          });
+        });
+
+        it('should support selecting the previous item with the "up" key', function(done) {
+          assert.equal(search.$.list.selectedItem, undefined);
+          flush(function() {
+            MockInteractions.pressAndReleaseKeyOn(search, 38);
+            MockInteractions.pressAndReleaseKeyOn(search, 38);
+            flush(function() {
+              assert.equal(search.$.list.selectedItem.textContent.trim(), 'Iowa State University');
+              done();
+            });
+          });
+        });
+
+        it('should support selecting the previous item with the "shift+tab" key', function(done) {
+          assert.equal(search.$.list.selectedItem, undefined);
+          flush(function() {
+            MockInteractions.pressAndReleaseKeyOn(search, 9, 'shift');
+            MockInteractions.pressAndReleaseKeyOn(search, 9, 'shift');
+            flush(function() {
+              assert.equal(search.$.list.selectedItem.textContent.trim(), 'Iowa State University');
+              done();
+            });
+          });
+        });
+
+        it('should submit the current item with the "enter" key', function(done) {
+          assert.equal(search.$.list.selectedItem, undefined);
+          flush(function() {
+            search.addEventListener('selected-changed', function(event) {
+              assert.equal(event.detail.value.value, 'Salte University');
+              done();
+            });
+            MockInteractions.pressAndReleaseKeyOn(search, 9);
+            MockInteractions.pressAndReleaseKeyOn(search, 9);
+            MockInteractions.pressAndReleaseKeyOn(search, 13);
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
