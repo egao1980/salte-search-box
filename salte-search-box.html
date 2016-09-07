@@ -151,7 +151,7 @@
       <template is="dom-if" if="[[value.length]]">
         <paper-icon-button id="clear" icon="close" on-tap="clear"></paper-icon-button>
       </template>
-      <paper-menu id="list" on-items-changed="__bindEvents">
+      <paper-menu id="list">
         <content></content>
       </paper-menu>
     </div>
@@ -169,19 +169,31 @@
         '__computeItemHeight(opened, results.length)'
       ],
 
+      ready: function() {
+        new MutationObserver(this.childrenUpdated.bind(this)).observe(this, { childList: true, subtree: true, characterData: true });
+      },
+
+      childrenUpdated: function(mutations) {
+        for (var mutation of mutations) {
+          for (var node of mutation.removedNodes) {
+            if (node.is === 'paper-item') {
+              node.removeEventListener('mousedown', this.__submit.bind(this));
+            }
+          }
+          for (var node of mutation.addedNodes) {
+            if (node.is === 'paper-item') {
+              node.addEventListener('mousedown', this.__submit.bind(this));
+            }
+          }
+        }
+      },
+
       __computeItemHeight: function(opened, size) {
         var height = 0;
         if (opened && size) {
           height = size * 48;
         }
         this.$.list.style.height = height + 'px';
-      },
-
-      __bindEvents: function(event) {
-        event.detail.value.forEach(function(item) {
-          item.removeEventListener('mousedown', this.__submit.bind(this));
-          item.addEventListener('mousedown', this.__submit.bind(this));
-        }.bind(this));
       },
 
       __selectPrevious: function(event) {
