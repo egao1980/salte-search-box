@@ -1,51 +1,29 @@
-_[Demo and API docs](https://salte-io.github.io/salte-search-box/)_
+[![Bower][bower-image]][bower-url]
+[![Travis][travis-ci-image]][travis-ci-url]
+[![Slack Status][slack-image]][slack-url]
 
 # \<salte-search-box\>
 
-[![Slack Status][slack-image]][slack-url]
-[![Travis][travis-ci-image]][travis-ci-url]
+[\<salte-search-box\>][salte-search-box-demo] is a [Polymer](http://polymer-project.org/) element that provides a Material search experience.
 
-A custom search element with template support!
+## Getting started
 
-**NOTE: This element is still in beta and is likely to change before being released**
+[![Salte Search Box][salte-search-box-screenshot]][salte-search-box-demo]
 
-## Install the Polymer-CLI
+Visit https://beta.webcomponents.org/element/salte-io/salte-search-box for features, demos, and documentation.
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
+## License
 
-## Viewing Your Application
+MIT
 
-```
-$ polymer serve
-```
+[salte-search-box-screenshot]: https://cloud.githubusercontent.com/assets/9692284/19503364/b1ff87c6-9578-11e6-80d1-87497c5f7cd8.PNG
+[salte-search-box-demo]: https://beta.webcomponents.org/element/salte-io/salte-search-box
 
-## Building Your Application
-
-```
-$ polymer build
-```
-
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+[bower-image]: https://img.shields.io/bower/v/salte-search-box.svg
+[bower-url]: https://github.com/salte-io/salte-search-box
 
 [slack-image]: https://salte-slack.herokuapp.com/badge.svg
 [slack-url]: https://salte-slack.herokuapp.com/
 
-[travis-ci-image]: https://img.shields.io/travis/salte-io/salte-search-box.svg?style=flat
+[travis-ci-image]: https://img.shields.io/travis/salte-io/salte-search-box/master.svg?style=flat
 [travis-ci-url]: https://travis-ci.org/salte-io/salte-search-box
