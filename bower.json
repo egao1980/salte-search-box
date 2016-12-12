@@ -8,7 +8,7 @@
   "homepage": "https://salte-io.github.io/salte-search-box",
   "repository": {
     "type": "git",
-    "url": "git://github.com/salte-io/salte-search-box"
+    "url": "git://github.com/egao1980/salte-search-box"
   },
   "keywords": [
     "web-components",
